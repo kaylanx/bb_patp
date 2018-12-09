@@ -5,3 +5,4 @@ Just adding this here so people can have a look at some old blackberry code refe
 
 http://www.kayley.name/2010/06/28/pay-at-the-pump-and-lpg-finder-for-blackberryr/
 
+![](phase1.JPG)
