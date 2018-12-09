@@ -20,38 +20,14 @@ public class PayAtThePumpScreen extends MainScreen {
         garageList = new GarageListField();
 
         add(garageList);
-        /*  int[] widths = { 200, 85, 20 };
-int[] paddings = { 0, 0, 0 };
-
-Field[][] tableContent = new Field[garages.size()][];
-
-// Loop through the FAKE_DATA array, placing appropriate fields into
-// a row for each WorkOrder instance.
-for (int curRecord = 0; curRecord < garages.size(); curRecord++) {
-    tableContent[curRecord] = new Field[3];
-    final GarageListItem garage = (GarageListItem) garages
-            .elementAt(curRecord);
-
-    tableContent[curRecord][0] = new LabelField(garage.getName(),
-            DrawStyle.ELLIPSIS);
-    tableContent[curRecord][1] = new LabelField(garage
-            .getDistanceInMiles()
-            + (garage.getDistanceInMiles() == 1 ? " mile" : " miles"));
-    tableContent[curRecord][2] = new LabelField("");
-    //
-}
-
-final TableListField table = new TableListField(tableContent, widths,
-        paddings);*/
-
 
         setGarages(garages);
 
         setStatus(new LabelField("(c)2009 Abstractec Ltd."));
     }
 
-	public void setGarages(Vector garages) {
-		Garage[] arrayOfGarages = new Garage[garages.size()];
+    public void setGarages(Vector garages) {
+        Garage[] arrayOfGarages = new Garage[garages.size()];
         garages.copyInto(arrayOfGarages);
 
         garageList.setGarages(arrayOfGarages);
@@ -61,7 +37,7 @@ final TableListField table = new TableListField(tableContent, widths,
                 addGarage();
             }
         });
-	}
+    }
 
     private void addGarage() {
         Dialog.alert("Add Garage not currently supported");

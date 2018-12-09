@@ -1,156 +1,150 @@
 package uk.co.abstractec.patp.blackberry;
 
-import net.rim.device.api.ui.DrawStyle;
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.Font;
-import net.rim.device.api.ui.Graphics;
-import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.*;
 import net.rim.device.api.ui.component.ListField;
 import net.rim.device.api.ui.component.ListFieldCallback;
 
 public class GarageListField extends ListField {
 
-	protected GarageRowManager[] _rows;
+    // The ListFieldCallback object that renders the rows of a TableListField.
+    private static final ListFieldCallback RENDERER = new ListFieldCallback() {
+        // A TableListField's row is drawn by delegating to the GarageRowManager
+        // for that row.
+        public void drawListRow(ListField listField, Graphics graphics,
+                                int index, int y, int width) {
+            GarageListField garageListField = (GarageListField) listField;
+            GarageRowManager rowManager = garageListField._rows[index];
+            rowManager.drawRow(graphics, 0, y, width, garageListField
+                    .getRowHeight());
+        }
 
-	private int originalRowHeight;
+        // The preferred width of a table list field is the sum of the widths of
+        // its columns.
+        public int getPreferredWidth(ListField listField) {
+            return 0;
+        }
 
-	public GarageListField() {
+        // there is no meaningful "row object"
+        public Object get(ListField listField, int index) {
+            return null;
+        }
 
-		originalRowHeight = getRowHeight();
-		setRowHeight(originalRowHeight * 2 + 10);
-	}
+        // prefix searching is not supported
+        public int indexOfList(ListField listField, String prefix, int start) {
+            return -1;
+        }
+    };
 
-	public Field getSelectedField() {
-		return _rows[getSelectedIndex()].getField(0);
-	}
+    protected GarageRowManager[] _rows;
+    private int originalRowHeight;
 
-	public Garage getSelectedGarage() {
-		return _rows[getSelectedIndex()].getGarage();
-	}
+    public GarageListField() {
+        originalRowHeight = getRowHeight();
+        setRowHeight(originalRowHeight * 2 + 10);
+    }
 
-	private class GarageRowManager extends Manager {
+    public Field getSelectedField() {
+        return _rows[getSelectedIndex()].getField(0);
+    }
 
-		private Garage garage;
+    public Garage getSelectedGarage() {
+        return _rows[getSelectedIndex()].getGarage();
+    }
 
-		public GarageRowManager(Garage garage) {
-			super(0);
-			this.garage = garage;
-		}
+    public void setGarages(Garage[] garages) {
+        int numRows = garages.length;
 
-		public Garage getGarage() {
-			return garage;
-		}
+        // Create a row manager for each row.
+        _rows = new GarageRowManager[numRows];
+        for (int curRow = 0; curRow < numRows; curRow++) {
+            _rows[curRow] = new GarageRowManager(garages[curRow]);
+        }
+        // Store the layout data.
 
-		public void drawRow(Graphics g, int x, int y, int width, int height) {
+        // Configure this ListField to operate with TableListField semantics.
+        setSize(numRows);
+        setCallback(RENDERER);
 
-			Font smallFont = g.getFont().derive(Font.PLAIN, 15);
+    }
 
-			Font boldFont = g.getFont().derive(Font.BOLD);
-			Font bigBoldFont = g.getFont().derive(Font.BOLD, height - 20);
+    private class GarageRowManager extends Manager {
 
-			int mainTextWidth = 270;
+        private Garage garage;
 
-			g.setFont(boldFont);
-			g.drawText(garage.getName(), x, y, DrawStyle.ELLIPSIS,
-					mainTextWidth);
+        public GarageRowManager(Garage garage) {
+            super(0);
+            this.garage = garage;
+        }
 
-			g.setFont(smallFont);
-			g.drawText(garage.getDescription(), x, y + originalRowHeight,
-					DrawStyle.ELLIPSIS, mainTextWidth);
+        public Garage getGarage() {
+            return garage;
+        }
 
-			int milesX = x + mainTextWidth + 20;
-			int milesQualifierX = x + mainTextWidth + 10;
+        public void drawRow(Graphics g, int x, int y, int width, int height) {
 
-			if (garage.getDistanceInMiles() >= 10) {
-				milesX -= 10;
-			}
+            Font smallFont = g.getFont().derive(Font.PLAIN, 15);
 
-			g.setFont(bigBoldFont);
-			g.drawText("" + garage.getDistanceInMiles(), milesX, y);
+            Font boldFont = g.getFont().derive(Font.BOLD);
+            Font bigBoldFont = g.getFont().derive(Font.BOLD, height - 20);
 
-			g.setFont(smallFont);
-			String mileageQualifier = (garage.getDistanceInMiles() == 1 ? "mile"
-					: "miles");
-			g.drawText(mileageQualifier, milesQualifierX, y + originalRowHeight
-					+ 10);
+            int mainTextWidth = 270;
 
-			// Arrange the cell fields within this row manager.
-			layout(width, height);
+            g.setFont(boldFont);
+            g.drawText(garage.getName(), x, y, DrawStyle.ELLIPSIS,
+                    mainTextWidth);
 
-			// Place this row manager within its enclosing list.
-			setPosition(x, y);
+            g.setFont(smallFont);
+            g.drawText(garage.getDescription(), x, y + originalRowHeight,
+                    DrawStyle.ELLIPSIS, mainTextWidth);
 
-			// Apply a translating/clipping transformation to the graphics
-			// context so that this row paints in the right area.
-			g.pushRegion(getExtent());
+            int milesX = x + mainTextWidth + 20;
+            int milesQualifierX = x + mainTextWidth + 10;
 
-			// Paint this manager's controlled fields.
-			subpaint(g);
+            if (garage.getDistanceInMiles() >= 10) {
+                milesX -= 10;
+            }
 
-			// Restore the graphics context.
-			g.popContext();
-		}
+            g.setFont(bigBoldFont);
+            g.drawText("" + garage.getDistanceInMiles(), milesX, y);
 
-		// Arrages this manager's controlled fields from left to right within
-		// the enclosing table's columns.
-		protected void sublayout(int width, int height) {
-			setExtent(getPreferredWidth(), getPreferredHeight());
-		}
+            g.setFont(smallFont);
+            String mileageQualifier = (garage.getDistanceInMiles() == 1 ? "mile"
+                    : "miles");
+            g.drawText(mileageQualifier, milesQualifierX, y + originalRowHeight
+                    + 10);
 
-		// The preferred width of a row is defined by the list renderer.
-		public int getPreferredWidth() {
-			return RENDERER.getPreferredWidth(GarageListField.this);
-		}
+            // Arrange the cell fields within this row manager.
+            layout(width, height);
 
-		// The preferred height of a row is the "row height" as defined in the
-		// enclosing list.
-		public int getPreferredHeight() {
-			return getRowHeight();
-		}
-	}
+            // Place this row manager within its enclosing list.
+            setPosition(x, y);
 
-	// The ListFieldCallback object that renders the rows of a TableListField.
-	private static final ListFieldCallback RENDERER = new ListFieldCallback() {
-		// A TableListField's row is drawn by delegating to the GarageRowManager
-		// for that row.
-		public void drawListRow(ListField listField, Graphics graphics,
-				int index, int y, int width) {
-			GarageListField garageListField = (GarageListField) listField;
-			GarageRowManager rowManager = garageListField._rows[index];
-			rowManager.drawRow(graphics, 0, y, width, garageListField
-					.getRowHeight());
-		}
+            // Apply a translating/clipping transformation to the graphics
+            // context so that this row paints in the right area.
+            g.pushRegion(getExtent());
 
-		// The preferred width of a table list field is the sum of the widths of
-		// its columns.
-		public int getPreferredWidth(ListField listField) {
-			return 0;
-		}
+            // Paint this manager's controlled fields.
+            subpaint(g);
 
-		// there is no meaningful "row object"
-		public Object get(ListField listField, int index) {
-			return null;
-		}
+            // Restore the graphics context.
+            g.popContext();
+        }
 
-		// prefix searching is not supported
-		public int indexOfList(ListField listField, String prefix, int start) {
-			return -1;
-		}
-	};
+        // Arrages this manager's controlled fields from left to right within
+        // the enclosing table's columns.
+        protected void sublayout(int width, int height) {
+            setExtent(getPreferredWidth(), getPreferredHeight());
+        }
 
-	public void setGarages(Garage[] garages) {
-		int numRows = garages.length;
+        // The preferred width of a row is defined by the list renderer.
+        public int getPreferredWidth() {
+            return RENDERER.getPreferredWidth(GarageListField.this);
+        }
 
-		// Create a row manager for each row.
-		_rows = new GarageRowManager[numRows];
-		for (int curRow = 0; curRow < numRows; curRow++) {
-			_rows[curRow] = new GarageRowManager(garages[curRow]);
-		}
-		// Store the layout data.
-
-		// Configure this ListField to operate with TableListField semantics.
-		setSize(numRows);
-		setCallback(RENDERER);
-		
-	}
+        // The preferred height of a row is the "row height" as defined in the
+        // enclosing list.
+        public int getPreferredHeight() {
+            return getRowHeight();
+        }
+    }
 }

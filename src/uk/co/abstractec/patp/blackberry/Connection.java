@@ -117,22 +117,20 @@ public class Connection extends Thread {
         catch (IOException e) {
             e.printStackTrace();
             System.out.println(e.toString());
-        }
-        catch (SAXException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
             System.out.println(e.toString());
-        }
-        catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException e) {
             e.printStackTrace();
             System.out.println(e.toString());
         }
     }// end connection function
 
-	private String getUrl() {
-		String fullUrl = GARAGES_URL + coords.getLatitude() + "/" + coords.getLongitude() + "/50";
-		LeastCostRouter router = new LeastCostRouter();
-		return router.getUrl(fullUrl);
-	}
+    private String getUrl() {
+        String fullUrl = GARAGES_URL + coords.getLatitude() + "/" + coords.getLongitude() + "/50";
+        LeastCostRouter router = new LeastCostRouter();
+        return router.getUrl(fullUrl);
+    }
 }// end connection class
 
 

@@ -89,19 +89,18 @@ public class Garage {
         this.distance = distance;
     }
 
-    
-    
+
     public Coordinates getCoordinates() {
-		return coords;
-	}
+        return coords;
+    }
 
-	public void setCoordinates(Coordinates coords) {
-		this.coords = coords;
-	}
+    public void setCoordinates(Coordinates coords) {
+        this.coords = coords;
+    }
 
-	// Hmm
+    // Hmm
     public void calcDistance(QualifiedCoordinates coords) {
-    	this.coords = new Coordinates(latitude, longitude, coords.getAltitude());
+        this.coords = new Coordinates(latitude, longitude, coords.getAltitude());
         distance = coords.distance(this.coords);
     }
 
