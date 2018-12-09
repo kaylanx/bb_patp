@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Pay at the Pump" default="deploy" basedir=".">
+
+	
+	
+    <taskdef resource="bb-ant-defs.xml"/>
+
+    <property name="jdehome" value="/Users/andy/Development-Tools/eJDE-4_7_0_46_Component/plugins/net.rim.eide.componentpack4.7.0_4.7.0.46/components"/>
+    <property name="jdkhome" value="/Library/Java/Home"/>
+
+    <!--<property name="jdehome" value="c:\Program Files\Research In Motion\BlackBerry JDE Component Package 4.7.0"/>-->
+    <!--<property name="jdkhome" value="c:\Program Files\Java\jdk1.6.0_16"/>-->
+
+    <property name="simulator" value="${jdehome}/simulator"/>
+    <property name="project-name" value="patp"/>
+
+    <property name="bin" value="${jdehome}/bin"/>
+
+
+    <target name="deploy" depends="build" description="Builds and Deploys Project">
+        <copy todir="${simulator}" overwrite="true">
+            <fileset dir="build">
+                <include name="*.cod"/>
+                <include name="*.debug"/>
+                <include name="*.csl"/>
+                <include name="*.cso"/>
+            </fileset>
+        </copy>
+    </target>
+
+
+    <target name="build" description="Builds Project">
+    	
+    	<!--mkdir dir="build"/-->
+        <rapc jdehome="${jdehome}"
+              jdkhome="${jdkhome}"
+        	  
+              destdir="build"
+              output="${project-name}"
+              quiet="false">
+
+            <jdp type="cldc"
+                 title="Pay at the Pump"
+                 vendor="Vendor=Abstractec."
+                 version="Version=0.9"
+                 description="Pay at the Pump"
+                 arguments=""
+                 systemmodule="false"
+                 runonstartup="false"
+                 startuptier="7"
+                 ribbonposition="0"
+                    >
+            </jdp>
+
+            <src>
+                <fileset dir=".">
+                    <include name="src/**/*.java"/>
+                    <include name="resource/**/*.*"/>
+                </fileset>
+            </src>
+        </rapc>
+    </target>
+
+	
+	<target name="sign">
+		<sigtool codfile="${build}/${project-name}.cod" />
+	</target>
+ 
+	<target name="clean">
+		<delete dir="${build}" />
+	</target>
+ 
+	<target name="load-simulator" depends="build">
+		<copy todir="${simulator}">
+			<fileset dir="${build}" includes="*.cod,*.cso,*.debug,*.jad,*.jar" />
+		</copy>
+		<exec executable="/bin/sh">
+			<arg value="-c" />
+			<arg value="${simulator}/9530.sh" />
+		</exec>
+	</target>
+
+	
+</project>

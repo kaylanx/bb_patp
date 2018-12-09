@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/NET_RIM_BLACKBERRY"/>
+	<classpathentry kind="lib" path="lib/bb-ant-tools.jar"/>
+	<classpathentry kind="src" path=".tmp"/>
+	<classpathentry kind="lib" path="/Users/andy/Development-Tools/eJDE-4_7_0_46_Component/plugins/net.rim.eide.componentpack4.7.0_4.7.0.46/components/lib/net_rim_api.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

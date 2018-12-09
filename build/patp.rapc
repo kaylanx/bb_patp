@@ -1,0 +1,10 @@
+MIDlet-Name: patp
+MIDlet-Version: Version=0.9
+MIDlet-Vendor: Vendor=Abstractec.
+MIDlet-Description: Pay at the Pump
+MIDlet-Jar-URL: patp.jar
+MIDlet-Jar-Size: 0
+MicroEdition-Profile: MIDP-2.0
+MicroEdition-Configuration: CLDC-1.1
+MIDlet-1: Pay at the Pump,,
+RIM-MIDlet-Flags-1: 0

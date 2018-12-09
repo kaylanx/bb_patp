@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+RIM-COD-Module-Name: patp
+RIM-COD-Module-Dependencies: net_rim_cldc,net_rim_locationapi,net_rim_xml,net_rim_xml_org,net_rim_bb_lbs_api_2,net_rim_bbapi_invoke,net_rim_os
+MIDlet-Jar-Size: 29094
+MIDlet-1: Pay at the Pump,,
+RIM-COD-Creation-Time: 1258850794
+MIDlet-Jar-URL: patp.jar
+RIM-COD-URL: patp.cod
+RIM-COD-SHA1: 21 5c 8b 1f 14 5f da 59 62 bb 60 47 b0 2d c0 ee 70 f9 9f 76
+RIM-COD-Size: 11412
+MicroEdition-Configuration: CLDC-1.1
+MIDlet-Version: Version=0.9
+MIDlet-Name: patp
+MIDlet-Description: Pay at the Pump
+MIDlet-Vendor: Vendor=Abstractec.
+MicroEdition-Profile: MIDP-2.0
+RIM-MIDlet-Flags-1: 0
